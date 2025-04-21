@@ -16,12 +16,12 @@ impl<Payload> Message<Payload> {
             src: self.dst,
             dst: self.src,
             body: Body {
-                id: id.map(|id| {
+                output_message_id: id.map(|id| {
                     let reply_id = *id;
                     *id += 1;
                     reply_id
                 }),
-                in_reply_to: self.body.id,
+                in_reply_to: self.body.output_message_id,
                 payload: self.body.payload,
             },
         }
@@ -42,7 +42,7 @@ impl<Payload> Message<Payload> {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Body<Payload> {
     #[serde(rename = "msg_id")]
-    pub id: Option<usize>,
+    pub output_message_id: Option<usize>,
     pub in_reply_to: Option<usize>,
     #[serde(flatten)]
     pub payload: Payload,
@@ -97,8 +97,8 @@ where
         src: init_message.dst,
         dst: init_message.src,
         body: Body {
-            id: Some(0),
-            in_reply_to: init_message.body.id,
+            output_message_id: Some(0),
+            in_reply_to: init_message.body.output_message_id,
             payload: InitPayload::InitOk,
         },
     };

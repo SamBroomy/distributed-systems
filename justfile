@@ -1,6 +1,13 @@
+build TARGET:
+    cargo build --release --bin {{ TARGET }}
 
-build:
-    cargo build --release
+run-maelstrom TARGET *FLAGS: (build TARGET)
+    ./maelstrom/maelstrom test -w {{ TARGET }} --bin target/release/{{ TARGET }} {{ FLAGS }}
 
-run-echo: build
-    ./maelstrom/maelstrom test -w echo --bin target/release/echo --node-count 1 --time-limit 10
+run-echo:
+    @just run-maelstrom echo --node-count 1 --time-limit 10
+
+run-unique-ids:
+    @just run-maelstrom unique-ids --time-limit 30 --rate 1000 --node-count 3 --availability total --nemesis partition
+
+run-all: run-echo run-unique-ids

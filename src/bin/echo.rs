@@ -12,20 +12,20 @@ enum Payload {
     EchoOk { echo: String },
 }
 
-struct EchoNone {
-    id: usize,
+struct EchoNode {
+    node_id: usize,
 }
 
-impl Node<(), Payload> for EchoNone {
+impl Node<(), Payload> for EchoNode {
     fn from_init(_state: (), _init: Init) -> Result<Self>
     where
         Self: Sized,
     {
-        Ok(EchoNone { id: 1 })
+        Ok(EchoNode { node_id: 1 })
     }
 
     fn step(&mut self, input: Message<Payload>, output: &mut StdoutLock) -> Result<()> {
-        let mut reply = input.into_reply(Some(&mut self.id));
+        let mut reply = input.into_reply(Some(&mut self.node_id));
 
         match reply.body.payload {
             Payload::Echo { echo } => {
@@ -40,5 +40,5 @@ impl Node<(), Payload> for EchoNone {
 }
 
 fn main() -> Result<()> {
-    main_loop::<(), EchoNone, Payload>(())
+    main_loop::<(), EchoNode, Payload>(())
 }
