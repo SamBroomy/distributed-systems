@@ -1,0 +1,10 @@
+*
+!*/
+!.gitignore
+!Cargo.toml
+!src/
+!**/*.rs
+!justfile
+/target
+/store
+/maelstrom
